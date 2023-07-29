@@ -1,0 +1,57 @@
+Vagrant.configure("2") do |config|
+  config.hostmanager.enabled = true 
+  config.hostmanager.manage_host = true
+  
+## Ansible-c VM ###
+  config.vm.define "ansible" do |ansible|
+#    config.vm.box = "dstoliker/cured-rhel9"  
+#    config.vm.box = "mcgill/rhel9.next"
+     config.vm.box = "alvistack/rhel-9"
+    ansible.vm.hostname = "ansible"
+	ansible.vm.network "private_network", ip: "192.168.56.90"
+        ansible.vm.network "public_network", ip: "192.168.100.90"
+
+  end
+  
+### Node01 vm ###
+   config.vm.define "node01" do |node01|
+#    config.vm.box = "dstoliker/cured-rhel9"
+    config.vm.box = "mcgill/rhel9.next"
+    node01.vm.hostname = "node01"
+    node01.vm.network "private_network", ip: "192.168.56.91"
+    node01.vm.network "public_network", ip: "192.168.100.91"
+	node01.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+	 end
+   end
+   
+### Node02 vm  ####
+  config.vm.define "node02" do |node02|
+#        config.vm.box = "dstoliker/cured-rhel9"
+        config.vm.box = "mcgill/rhel9.next"
+     	node02.vm.hostname = "node02"
+        node02.vm.network "private_network", ip: "192.168.56.92"
+        node02.vm.network "public_network", ip: "192.168.100.92"
+
+  end
+  
+### NOde03 vm  #### 
+  config.vm.define "node03" do |node03|
+#        config.vm.box = "dstoliker/cured-rhel9"
+        config.vm.box = "mcgill/rhel9.next"
+	node03.vm.hostname = "node03"
+        node03.vm.network "private_network", ip: "192.168.56.93"
+        node03.vm.network "public_network", ip: "192.168.100.93"
+
+  end
+  
+### Node04 vm  ####
+ config.vm.define "ansibleloadbalancer" do |ansibleloadbalancer|
+#        config.vm.box = "dstoliker/cured-rhel9"
+        config.vm.box = "mcgill/rhel9.next"
+        ansibleloadbalancer.vm.hostname = "ansible-loadbalancer"
+        ansibleloadbalancer.vm.network "private_network",  ip: "192.168.56.93" 
+        ansibleloadbalancer.vm.network "public_network", ip: "192.168.100.93"
+
+ end
+end
