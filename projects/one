@@ -23,3 +23,45 @@ command like wget command.
 8) EXPOSE --> Informs docker that the container listens on the specified network-porta at runtime . 
 
 ENV --> To set the environment variables .
+
+
+
+
+Create your First Dockerfile :
+==============================
+
+pull centos from dockerhub-----------------------------> FROM 
+install java ------------------------------------------> RUN 
+Create /opt/tomcat directory --------------------------> RUN
+Change work directory /opt/tomcat----------------------> WORKDIR
+Download tomcat packages-------------------------------> ADD or RUN
+Extract tar.gz file------------------------------------> RUN 
+Rename the tomcat directory ---------------------------> RUN 	
+Tell to docket that it runs on Port 8080 --------------> EXPOSE 
+Start the tomcat service ------------------------------> CMD
+
+
+
+My First Dockerfile:
+====================
+FROM centos
+
+RUN cd /etc/yum.repos.d/
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
+RUN yum -y install java
+RUN mkdir /opt/tomcat
+WORKDIR /opt/tomcat
+ADD  https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz .
+RUN tar -zxvf apache-tomcat-9.0.78.tar.gz
+RUN mv apache-tomcat-9.0.78/* /opt/tomcat 
+EXPOSE 8080
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+
+
+
+
+
+
+
