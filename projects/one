@@ -1,0 +1,25 @@
+Docker file explanation:
+=========================
+
+1) FROM --> First one is FROM to pull the base imaeg, Allmost all the Dockerfile starts with FROM instruction. It tells you that 
+what is the base image do you require to start with your Dockerfile 
+
+2) RUN --> To execute commands, if you have some shell commands like installing packages, Creating users, etc almost 
+all the shell commands we can execute with the RUN command instruction on Dockerfile.
+
+3) CMD  --> To provides defaults for an executing container, CMD instruction get executed at the time of docker execution 
+
+4) ENTRYPOINT  -->  Its also similar to CMD get executed at the time of container execution , However CMD can be commands
+can be overwritten but ENTRYPOINT commands are not overwritten. And CMD can be work like aguments for ENTTRYPOINT .
+
+5) WORKDIR --> It is something like CMD command if we wish to switch our directory within the container Then we could
+use workdir instruction.
+
+6) COPY --> Copy a directory from your local(docker-host) machine to the docker container.
+
+7) ADD --> Copy a files and folders  from your local machine (docker-host) to docker container. We can also use this 
+command like wget command. 
+
+8) EXPOSE --> Informs docker that the container listens on the specified network-porta at runtime . 
+
+ENV --> To set the environment variables .
