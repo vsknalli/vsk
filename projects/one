@@ -59,6 +59,39 @@ RUN mv apache-tomcat-9.0.78/* /opt/tomcat
 EXPOSE 8080
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]
 
+---------------------------------------------------------------------------
+
+FROM tomcat:latest
+RUN cp -r /usr/local/tomcat/webapps.dist/*  /usr/local/tomcat/webapps 
+--------------------------------------------------------------------------------
+
+
+Integrare Docker with Jenkins:
+==============================
+
+1) Create dockeradmin user 
+2) Install publish over ssh plugin
+3) Add Docker host to jenkins "configure systems"
+
+docker exec in GUI:
+===================
+cd /opt/docker;
+docker build -t regappv1 . ;
+docker stop registerapp;
+docker rm registerapp;
+docker run -d --name registerapp -p 8086:8080 regappv1  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
