@@ -82,7 +82,21 @@ docker rm registerapp;
 docker run -d --name registerapp -p 8086:8080 regappv1  
 
 
+Prepare Ansible Server:
+======================
+1) Setup Hostname
+2) Create ansadmin user
+3) Add user to sudoers file
+4) Generate SSH keys 
 
+
+
+
+
+
+
+
+  
 
 
 
