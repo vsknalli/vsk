@@ -4,8 +4,8 @@
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 Vagrant.configure(2) do |config|
-  config.hostmanager.enabled = true
-  config.hostmanager.manage_guest = true
+#  config.hostmanager.enabled = true
+#  config.hostmanager.manage_guest = true
 #  config.hostmanager.manage_host = true
 #  config.vm.provision "shell", path: "bootstrap.sh"
 
