@@ -44,10 +44,20 @@ Vagrant.configure(2) do |config|
 
   end
 
-  config.vm.define "jenkins" do |jenkins|
-    jenkins.vm.box = "eurolinux-vagrant/centos-stream-9"
+  config.vm.define "jenkinsmaster" do |jenkins|
+    jenkins.vm.box = "bento/ubuntu-20.04"
     jenkins.vm.hostname = "jenkins"
-    jenkins.vm.network "private_network", ip: "192.168.56.26"
+    jenkins.vm.network "private_network", ip: "192.168.56.20"
+    jenkins.vm.provider "virtualbox" do |vb|
+     vb.memory = "2048"
+   end
+  end
+
+
+  config.vm.define "jenkinsslave" do |jenkins|
+    jenkins.vm.box = "bento/ubuntu-20.04"
+    jenkins.vm.hostname = "jenkins"
+    jenkins.vm.network "private_network", ip: "192.168.56.21"
     jenkins.vm.provider "virtualbox" do |vb|
      vb.memory = "2048"
    end
@@ -56,7 +66,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "ansible" do |ansible|
     ansible.vm.box = "eurolinux-vagrant/centos-stream-9"
     ansible.vm.hostname = "ansible"
-    ansible.vm.network "private_network", ip: "192.168.56.26"
+    ansible.vm.network "private_network", ip: "192.168.56.23"
     ansible.vm.provider "virtualbox" do |vb|
      vb.memory = "2048"
    end
@@ -64,7 +74,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "docker" do |docker|
     docker.vm.box = "roboxes/fedora35"
     docker.vm.hostname = "docker"
-    docker.vm.network "private_network", ip: "192.168.56.27"
+    docker.vm.network "private_network", ip: "192.168.56.24"
     docker.vm.provider "virtualbox" do |vb|
       vb.memory="2048"
     end
@@ -78,7 +88,7 @@ Vagrant.configure(2) do |config|
     tomcat.vm.box = "eurolinux-vagrant/centos-stream-9"
 #    tomcat.vm.provision "shell", path: "vagrant_provision.sh"
     tomcat.vm.hostname = "tomcat"
-    tomcat.vm.network "private_network", ip: "192.168.56.27"
+    tomcat.vm.network "private_network", ip: "192.168.56.25"
     tomcat.vm.provider "virtualbox" do |vb|
       vb.memory="2048"
     end
