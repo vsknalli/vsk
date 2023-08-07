@@ -9,6 +9,24 @@ For versioning:
 mkdir -p versions
 cp target/vprofile-v1.war versions/vprofile-V$BUILD_ID.war
 
+PERAMETRAISED VERSIONINS:
+-------------------------
+mkdir -p versions
+#cp webapp/target/webapp.war versions/webapp-V$BUILD_ID.war
+cp webapp/target/webapp.war versions/webapp-V$VERSION.war
+
+
+Suppose if we want to some more advanced versioning like timestamp..etc...we can use some plugins for this type of versioning
+insall timestamp or zentime pluging and in job General coloumn type this vlaue yy-MM-dd-HHmm
+
+and the last "Post Step"->Execute shell filed add this entry like the below 
+mkdir -p versions
+#cp webapp/target/webapp.war versions/webapp-V$BUILD_ID.war
+#cp webapp/target/webapp.war versions/webapp-V$VERSION.war
+cp webapp/target/webapp.war versions/webapp-$BUILD_TIMESTAMP.war
+cp webapp/target/webapp.war versions/webapp-$BUILD_ID-$BUILD_TIMESTAMP.war
+
+
 
 
 Docker file explanation:
