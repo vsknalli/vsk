@@ -1,5 +1,16 @@
 
 GitHub repo: commit code : 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
+
+
+JENKINS:
+=======
+For versioning:
+-----------------
+mkdir -p versions
+cp target/vprofile-v1.war versions/vprofile-V$BUILD_ID.war
+
+
+
 Docker file explanation:
 =========================
 
