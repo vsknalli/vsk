@@ -20,11 +20,55 @@ Suppose if we want to some more advanced versioning like timestamp..etc...we can
 insall timestamp or zentime pluging and in job General coloumn type this vlaue yy-MM-dd-HHmm
 
 and the last "Post Step"->Execute shell filed add this entry like the below 
+
+Hello-World-project:
+--------------------
 mkdir -p versions
 #cp webapp/target/webapp.war versions/webapp-V$BUILD_ID.war
 #cp webapp/target/webapp.war versions/webapp-V$VERSION.war
 cp webapp/target/webapp.war versions/webapp-$BUILD_TIMESTAMP.war
 cp webapp/target/webapp.war versions/webapp-$BUILD_ID-$BUILD_TIMESTAMP.war
+
+Maven-project:
+--------------
+mkdir -p versions
+#cp target/todo-api-1.0-SNAPSHOT.war versions/todo-V$BUILD_ID.war
+cp target/todo-api-1.0-SNAPSHOT.war versions/todo-V$BUILD_ID-$BUILD_TIMESTAMP.war
+
+V-Profile project:
+------------------
+mkdir -p versions
+#cp target/vprofile-v1.war versions/vprofile-V$BUILD_ID.war
+cp target/vprofile-v1.war versions/vprofile-V$BUILD_ID-$BUILD_TIMESTAMP.war
+=========================================================================================================================
+
+Deveopes write the code and make the changes in the code and test it locally(git), 
+if they are good with the chagnes, they will push it to the centralaized repository like GitHub, 
+So developers will have a git tool with will integrate with GitHub repository and the code will be commited to 
+GitHub repository, 
+As soon as there is a code-change . Jenkins will detect the change and fetch the code by using git tool.
+so jenkins will have git tool and git-plugin which will help to accomplish the tasks whenever there is a change , jenkins will 
+fetch the code and build it, we will be using maven build tool because we do have JAVA code.
+Once the build completes it will generate artifacts, Next we will condect UNIT test by using Maven ,
+Maven will have some unit test framework that developers will use, UNIT test will be part of our source code , it will 
+generate the report in xml format , 
+
+	Once the report ready we will condect another kind of test called us code analysis , now unit test will check whether 
+the unit of code works or not , But code analysis checks if the code have any vulnerability . Are you following the best 
+prctices? or Do you have any bug in the code and there many other perametes the code analysis will check the code .
+
+We will be using sonarQube scanner to scan the code also we will be using checkstyle to scan the code and it will generate 
+the reports in in xml format, These report will be uploded t sonarQube server. In sonarQube server we can see and we can 
+have proper graph, charts and we can see what are the bugs,vulnerabilities and many other in our code.
+
+we can set Qualitiy Gates, if we say , if my code does not follow these practices , then fail the build And if it fails then 
+the pipeline will stop , if it passes we have verified copy of Artifacts .
+
+So we build the code we test the code and we analysis the code ....Now we can distrube the artifact and to be deployed on 
+the servers.
+
+But before we deploying it to the servers, these artifact will be versioned and will be uploaded to Nexus sona type repository.
+ 
 
 
 
