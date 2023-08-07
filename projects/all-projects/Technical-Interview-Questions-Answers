@@ -11,6 +11,149 @@ deditcated port and that port is 53.
 seach service separetley. NFS-2049
 
 Suppose if the Onse server is serving 10 services then we need 10 ports .Thats the reason behind different port runs on one server.
-
+------------------------------------------------------------
 2) Tell us about /etc/password in Linux ?
+This first field is always the username
+1 --> Username
+2 --> x - Password column 
+3 -UID assigned to the user
+4 GroupID -- Which group the userid belongs 
+5 User Describtion
+6 Home Directory /home/vsk
+7 Shell --> The shell where the user is using 
+-------------------------------------------------------------
+
+Explain about Cron job ?
+How you schedule cron job and telll me what are the dirrerent fields of cron job or the syntax ?
+if youur cron job doesn't run how will you trouble-shoot?
+Ans:
+==== In order to run the cron job we need to run # crontab -e 
+-e is for editing, once we run it will open vi edirot 
+1) Miniutes 
+2) Hour 
+3) Day-of-the-Month
+4) Month
+5) Day-of-the-week
+
+Trubleshoot--> First we need to check cronjob logs /var/log/cron & /var/log/messages file also we need to check we need to check
+the mail as well 
+peole doesn't realize the actual syntax entry inside the cron 
+----------------------------------------------------------------------------------------
+3) Boot-sequance in Linux ?
+ The boot sequance changes in centos 7/Redhat7 and above 	
+ Systemd is the new service manager in centos7/Redhat7 that manages the boot sequanc 
+ It is backward compatible with sysV init scripts used by previous versions of Rehat including Rhel-6
+ Every system administrator need to understand the boot process of an OS inorder to trubleshoot effectively
+ 
+ The first thing first is as soon as we power on a machine or a computer it actually have fireware in it, Remember, that 
+the firmware has nothing to do with operating system. That fireware actually comes in with that machine preinstalled by 
+that manufacture.That firmwaer is called BIOS whch is refered to as basic input and output settings.so its starts up and 
+it goes through the POST process means it startsup then it goes through all the hardware that is attched , it goes through 
+every one of them and checks the Health.
+	If all good to go the the MBR is loaded , whiach is stand for Master Boot Record, information is saved in the 
+first sector of the Harddrive -> which indicates where the Grub2 is located , so it can be loaded into the computor RAM
+	Basically Grub2 job is to load the kernel, the Linux kernel , That information is in /boot/grub2/grub.config 
+
+Now the kernel comes up , kernel is the core of the operating system, which loads required drivers from initrd.img file
+in order to comunicate the kerlel with hardware which requires drivers that talk to the Hardware
+Loads all the drivers and it starts the first OS process That is called "systemd" , by default it is given the process id 
+of number 1 , and it all reuired processs and thatn 
+
+	it reads /etc/systemd/system/default.target to bring the system into the run-level 
+Linux system has 0-6 total 7 Runlevels , The default run level has been defined in this /etc/systemd/system/default.target file
+Which reads this file and bring the system into default run level.
+
+-------------------------------------------------------------------------------------------------
+4) Explain the difference between RAID0, RAID1 & RAID5 ?
+RAID0:
+----- Is concodination and stripe , inorder to avail more disk space and make read-write performance we can go with 
+Raid -0 mostly which is used for Data-Where Housing and Backup , The disadvantage of Raid 0 is if one disk fails we loose 
+the data, i mean there is no data redencency in Raid-0.
+
+RAID-1
+------RAID-1 eleminate the disadvantage of Raid-0 where we loose one disk we loose the data , since we mirror we wont loose 
+the data in Raid-1.whch provides data high availability. 
+
+RAID-5
+------ To solve all this 0 and 1 we can come up with Raid-5 , Raid-5 is stripping with parity , we need to have 3 or more disks
+-------------------------------------------------------------------------------------------------------------
+
+5) Explain about NIC Bonding ?
+Why do we need NIC-Bonding and what is the purpose of NIC-Bonding ?
+How the NIC-bonding works?
+HOw to configure NIC bonding?
+
+Why do we need NIC-Bonding:
+-----------------------------> NIC Netowrk Interface Card , We have Netowrk port , that port is connected with ehternet cable
+That ether net cable connected with is to provide the internet service or netwok service to communicate with one server to 
+another , In production environment server if the one NIC fails , the communiation & the work flow is down which leads 
+business impact to avid this situvation we bring NIC bonding to make the network availability via boding two NIC together,
+With the hlep of this NIC bonding we get redency and bandwith as well .
+
+Configuration:
+--------------> First we need to make sure the NIC driver exists on the server that allow to do bonding , if not installed 
+the drive using the command modepobe 
+And for binding both NIC we need to do modification in /etc/sysconfig/network-scripts/bond0 and bond-1 
+Put some perametes 	
+To validate the configuration --> systemctl reload network 
+
+----------------------------------------------------------------------------------------------------------
+
+6) How would you installing and configuring httpd server ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
