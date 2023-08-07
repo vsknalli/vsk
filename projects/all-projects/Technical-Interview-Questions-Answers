@@ -1,0 +1,16 @@
+
+1) What is the purpose having different ports in Linux server ?
+	Each server in Linux have to communiate through IP &  the IP trouch port.
+
+Example:
+--------
+server-A --> Running two service on it , let say the one is DNS and the other is NFS 
+When you are communicating to that server and you want to talk to DNS service , Then that DNS service have its own 
+deditcated port and that port is 53.
+	Same way if you want to communicate to NFS service on the same server , it is recomendated that we should run 
+seach service separetley. NFS-2049
+
+Suppose if the Onse server is serving 10 services then we need 10 ports .Thats the reason behind different port runs on one server.
+
+2) Tell us about /etc/password in Linux ?
+
