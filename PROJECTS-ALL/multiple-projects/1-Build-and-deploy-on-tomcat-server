@@ -63,17 +63,56 @@ echo $PATH - > to validate
 And go to Jenkins-GUI -> ManageJenkins ->Plugins -- maven integration plugin - we need to install 
 ManageJenkins- Global Tool --> add JDK & Maven installed paths
 
+BUILD JAVA PROJECT USING JENKINS:
+================================
+Newitem--FirstMaven-project--select Maven project --ok 
+Description --> SCM <Git-URL>--Build - clean install -Apply and OK 
 
-
-
-
-
-
+===============================================================================================================================
 
 (iii) Setup Tomcat server
 =========================
-(iv) Itegrating GitHub,Maven,TOmcat server with Jenkins 
+	1) Linux-server or EC2 instance
+	2) Instal java-11
+	3) Configure tomcat
+	4) Start Tomcat Server
+	5) Access tomat over web GUI
+Firs we need to install java-11 
+Go to Google search "tomcat downlod" wget tar.gz below /opt and tar -zxvf tomcat.tar.gz and mv tomcat-xxx to tomcat 
+cd /opt/tomcat/bin --> ./startup.sh to start tomcat service 
+Now we can able to access via 8080 port 
+But when we acces manager's app it will through error stating that update context.xml file 
+got to tomcat directory and search context.xml file # find / -name contxt/xml, here we need to update host-manager and manager 
+directory paths
+in this two files we need to command valueClassName entry with <!--           --> like that to comment 
+same lines in both files .and we need to shutdown.sh and startup.sh service .... after that we could able to get the login promt while we press manager's app , But we dont have credentials , for that 
+
+There is a tomcat-users.xml file available below conf directory need to update couple of users like GUI admin and developer user with previlages.
+After we edit the file we need to shutdown or startup the tomcat service or we can use softlink as well 
+ln -s /opt/tomcat/bin/startup.sh /usr/local/bin/tomcatup
+ln -s /opt/tomcat/bin/shutdown.sh /usr/local/bin/tomcatdown
+
+
+(iv) Itegrating TOmcat server with Jenkins 
 =======================================================
+ To integrate tomcat with jenkins we need to install "Deploy to container" plugins by using this pluginn we can deploy the 
+code on tomcate server. 
+Next thing we need to configure tomcat-server with credentils
+These two things are nessary to integrate tomcat with Jenkins 
+
+Jenkins-GUI-> ManageJenkins-plugins-search "Deploy to Container" (This plugin allows you to deploy war file to container)
+
+Nowe we need to configure tomcat with credentisls
+ManageJenkins--Manager credentisls--jenkins--Global credentials--select username with password option 
+deployer user and deployer password we need to provide 
+
+Newitem-->Name:Build and deploy --> Maven project--ok
+Description--> SCM <Git-URL> Build "clean install" --> post Build option slect "Deploy war/ear on container"
+**/..war* --> add contaner slect tomcat-9 --> select credentials of server (which we allready added)
+provide "tomcat url:8080" --apply and save.
+
+As a developer pull the code to local machine and edit the source html file and update 
+
 (v) Create CICD JOb-we are going to see how we are  build & deploy it on tomat server
 =====================================================================================
 (vi) Test the deployment
