@@ -1,3 +1,5 @@
+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
+
 1) Build and deploy on Tomcat server 
 Setup CICD with GitHub-->Jenkins-->Maven and Tomcat
 
@@ -30,7 +32,44 @@ Steps:
 	   ManageJenkins-->GlbalTool-->to to Git installation give the git path
 These are the three stypes we shoull follow
 
+RUN FIRST JOB PULL CODE FROM GITHUB:
+===================================
+Newitem-> jobname->Freestyle-ok---->Decription--> SCM-<URL> --> Apply and Save it --> BuildJOb
+Successfully cloned on to our jenkins servers in workspace (in server path /var/lib/jenkins/workspace/<JObName> see in
+Jenkinsserver in this path.)
 	
+INTEGRARE MAVEN WITH JENKINS:
+=============================
+Normally we can user Maven as a seperate Build server , to reduce the complexcivy here we are using Jenkins server as 
+as Build server for that 
+	1) setup Maven on Jenkins server
+	2) we Need to setup Environment Variable, Maven is a java based application thats the reason we need java
+already we insalled java for jenkins so no need to install , however we need to sen  the M2,M2_HOME path along with JAVA_HOME
+	3) Need to install Maven plugin on jenkins GUI
+	4) and Configure Maven and java on Jenkins GUI
+in google go to maven download --> we can download Binary.tar.gz file inside /opt/ here we can download via wget 
+# ta-zxvf apahe.tar.gz --> its get extracted 
+mv apache-maven-3.8.3. maven
+cd maven 
+cd bin -->here we can find mvn command in side this directory this command works but out side it wont work for that we need 
+to export the path in ~/.bash_profile
+M2_HOME=/opt/maven
+M2=/opt/maven/bin
+JAVA_HOME=/usr/lib/jvm/<path>
+PATH=$PATH:$HOME/bin:$JAVA_HOME:$M2:$M2_HOME
+source ~/.bash_profile
+echo $PATH - > to validate 
+
+And go to Jenkins-GUI -> ManageJenkins ->Plugins -- maven integration plugin - we need to install 
+ManageJenkins- Global Tool --> add JDK & Maven installed paths
+
+
+
+
+
+
+
+
 (iii) Setup Tomcat server
 =========================
 (iv) Itegrating GitHub,Maven,TOmcat server with Jenkins 
