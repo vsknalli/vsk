@@ -1,0 +1,41 @@
+1) Build and deploy on Tomcat server 
+Setup CICD with GitHub-->Jenkins-->Maven and Tomcat
+
+(i) setup Jenkins server
+=========================-
+	> Setup Linux server 
+	> Install Java
+	> Install Jenkins
+	> Start Jenkins
+	> Access web UI on port 8080
+After we setup the jenkins server we can try & Run First-Jenkins-job
+Newitem --> Enter item Name --> Freestyle --> Description --> Build ...etc..etc.
+
+
+(ii) Setup and configure Maven and Git
+========================================
+		We are in the process of setting up pipeline to build out code for this sofar we have installed Jenkins
+and our code is on our GitHub.
+		Usally to pull the code from GitHub or anyvesion contrll system our system show have Git, Similar way to pull
+the code onto jenkins we should install Git over jenkins-server , so on Jenkins cli first we need to insall git and 
+then we can integrate GitHub with Jenkins on the GUI.
+
+Steps:
+-----
+	1) First we need to install Git on Jenkins-server on cli
+           # apt install git
+	2) Install GitHub plugin on Jenkins-GUI After that 
+           manageJenkins-->plugins-->github-->install withour restart  (Because i want integrate GitHub to Jenkins)
+	3) Configure Git on Jenkins-GUI
+	   ManageJenkins-->GlbalTool-->to to Git installation give the git path
+These are the three stypes we shoull follow
+
+	
+(iii) Setup Tomcat server
+=========================
+(iv) Itegrating GitHub,Maven,TOmcat server with Jenkins 
+=======================================================
+(v) Create CICD JOb-we are going to see how we are  build & deploy it on tomat server
+=====================================================================================
+(vi) Test the deployment
+=========================
