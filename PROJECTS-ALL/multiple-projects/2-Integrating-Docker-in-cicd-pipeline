@@ -1,1 +1,7 @@
-1
+###################################
+DEPLOY ARTIFACT ON DOCKER-CONTAINER
+##################################
+
+For this first we need to setup Docker Host and need to install docker on that host and start docker services
+
+

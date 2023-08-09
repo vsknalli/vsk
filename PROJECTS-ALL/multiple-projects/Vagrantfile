@@ -72,7 +72,8 @@ Vagrant.configure(2) do |config|
    end
   end
   config.vm.define "docker" do |docker|
-    docker.vm.box = "roboxes/fedora35"
+#    docker.vm.box = "roboxes/fedora35"
+    docker.vm.box = "centos/7"
     docker.vm.hostname = "docker"
     docker.vm.network "private_network", ip: "192.168.56.24"
     docker.vm.provider "virtualbox" do |vb|
@@ -87,6 +88,29 @@ Vagrant.configure(2) do |config|
       vb.memory="2048"
     end
   end
+
+  config.vm.define "sonarqube" do |sonarqube|
+  config.vm.provision "shell", path: "/home/vsk/DEVOPS-DATACENTER/codes-shell/ubuntu20-sonar-setup.sh"
+    sonarqube.vm.box = "bento/ubuntu-20.04"
+    sonarqube.vm.hostname = "jenkins"
+    sonarqube.vm.network "private_network", ip: "192.168.56.26"
+    sonarqube.vm.provider "virtualbox" do |vb|
+     vb.memory = "6048"
+   end
+  end
+
+  config.vm.define "nexus" do |nexus|
+  config.vm.provision "shell", path: "/home/vsk/DEVOPS-DATACENTER/codes-shell/centos-nexus-setup.sh"
+    nexus.vm.box = "centos/7"
+    nexus.vm.hostname = "nexus"
+    nexus.vm.network "private_network", ip: "192.168.56.27"
+    nexus.vm.provider "virtualbox" do |vb|
+     vb.memory = "3048"
+   end
+  end
+
+
+
 
 
  end
