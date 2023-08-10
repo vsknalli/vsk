@@ -57,11 +57,93 @@ CMD ["/opt/tomcat/bin/catalina.sh, "run""]
 # docker build -t mytomcat . 
 # docker run -d --name mytomcat-server -p 8081:8081 mytomcat
 
-##### To Integrate Docker with Jenkins ##################3
+
+
+
+##### To Integrate Docker with Jenkins #######################################################################
 
  	. Create a dockeradmin user
 	. Install "Publish Over SSH" Plugin 
 	. Add dockerhost to Jenkins "Configure system"
+-----------------------------
+# useradd dockeradmin
+# passwd dockeradmin
+# usermod -aG dockerroot docker
+# vi /etc/ssh/sshd_config 
+PasswordAuthentication yes
+# passwordAuthentication no
+# systemctl reload sshd
+-----------------------------
+
+Go to Jenkins GUI 
+ManageJenkins-Plugins-install "Publish over ssh" - install without restart
+
+ManageJenkins-system-go to PubilshOverSSH -> add ssh server - Provide the below info
+Name: docker-host
+HostName: 192.168.56.24
+Username: dockeradmin 
+Go to Advanced and provide the password - validate the connection TestConfiguration --Apply and Save
+
+#### Now we are going to deploy the Artifacts on Docker-Container ###############################################
+Pull the code from GitHub and build with Help of Maven and copy the artifacts on the docke Host 
+Once the artifact is available in docker-host then copying the artifact inside the container is easy.
+
+Jenkins GUI instead of create a new job , copy it from Buildand deply on maven job 
+in post-Build-Action remove deploy the actifact on "Deploy war/ear to container" instead we need to use 
+"publish over-ssh plugin"
+Name: Build and deploy on container
+in post-Build-Action: if we choose this option it will show the available ssh server options , so select docker-host
+----------------------------
+Name: docker-host
+Sourcefile: **/.war*
+Remove Source: webapp/target
+Remote Directory: 
+Exec:
+---------------------------Apply & Save and RUN
+
+# Till now the artifact is copied form Github and build by maven in jenkins and copied to the source file to docker hosts /opt/home directory 
+# Now we need to lanch a new container along with our war file , out artifact is available in docker's home directory 
+# The best way is Keep the source file and Dockerfile in seprate directory , we use /opt/docker in docker host 
+mkdir /opt/docker
+chown dockeradmin:dockeradmin /opt/docker
+From now onwards i tell the job instead copying artifactory on dockeradmin home directory copy it on /opt/docker
+cp /root/Docker /opt/docker
+chown dockeradmin:dockeradmin /opt/docker/Dockerfile
+
+Now to to jenkins job --> configure -> RemoteDirectory: //opt//docker  --> should be double //
+
+Now Run the job it will copy the artifact war  on docker hosts /opt/docker folder --validate it ...!!!
+
+------------------------
+Now our requirement is need to create container along with artifact war file , Then only we can access our application fro URL
+
+for that we need to some modificaion in Dockerfile
+-----------------------------------------------------------------
+vi Dockerfile
+FROM tomcat:latest
+RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+COPY ./*.war /usr/local/tomcat/webapps 
+-------------------------------------------------------------------
+# docker build -t tomcat:v1 .       --> . is current directory Dockerfile available
+# docker images 
+# docker run -d --name regapp:v0 -p 8081:8080 tomcat:v1 
+# docker ps 
+Now we can access our application on port 192.168.56.24:8081/webapp 
+
+we did id manually if we want to automatically we need to , edit the same job in jenkins -GUI 
+edit -> Build deploy on docker-container job -> configure -> postbuild - Exec Command  
+cd /opt/docker;
+docker build -t regapp:v1 .
+docker run -d --name regapp:v1 -p 8081:8081 regapp:v1 
+# Notes:-----------------------------------------------------------------------
+beore executing docker run delete unnessary images and container in docker host
+docker image prune -a
+docker conainer prune 
+-----------------------------------------------------------------------------
+Now we can access the application in web GUI 
+
+# if you Rerun the same job it get failed becuse alrady in the same name containe available to avaid this we need to do 
+# some modifications in the same job in post-Bild: Exec column 
 
 
 
@@ -73,8 +155,18 @@ CMD ["/opt/tomcat/bin/catalina.sh, "run""]
 
 
 
-Now all fine with tomcat homepage , we need to do some configuration changes and credentials ]
-to access "Manager App"
 
-For that we need to customise the dockerfile for this tomcat appliation
+
+
+
+
+
+
+
+
+
+
+
+
+
 
