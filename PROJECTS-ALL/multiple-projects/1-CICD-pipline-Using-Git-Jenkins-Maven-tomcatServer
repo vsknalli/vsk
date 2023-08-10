@@ -117,3 +117,22 @@ As a developer pull the code to local machine and edit the source html file and 
 =====================================================================================
 (vi) Test the deployment
 =========================
+
+############## CONSISE ##############################
+
+1) Need to setup Jenkins server
+2) JAVA11, git , Maven needs to install and export M2,M2_HOME,JAVA_HOME path in jenkins server 
+3) "GitHub,Deploy to Container, Maven Integration" plugins needs to install on jenkins-GUI
+4) ManageJenkins->Tools->jDK-11-Path, Git-Path,Mavn-Home-Path needs to update 
+5) ManageJenkins->credentials->GlobalCredentials->Add->"deployer-user-password-needs to provide"
+5) New item -> SCM-> pool SCM -> Build Gols-> Add Post Build action "DeployWarEar to container"
+In this Deploy to container we need to provide
+	1) Tomcat server crededtials need to select
+	2) Tomat server URL 
+So Now The Artifact will be get deployed on Tomcat Destination Server 
+####################### Deploy war/tar on Tomcat server completed ##################
+
+
+
+
+
