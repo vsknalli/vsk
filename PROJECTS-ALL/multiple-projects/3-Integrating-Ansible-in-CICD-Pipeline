@@ -32,6 +32,35 @@ dockerHub pull the image whatever we mentioned in our playbook and create a cont
 	6) Enable password passed login
 	7) Install Ansible
 
+# hostnmectl set-hostname ansible.example.com
+
+# useradd ansadmin
+# passwd ansadmin
+# vi /etc/sudoers
+# sudo su - ansadmin 
+# vi /etc/ssh/sshd_config -> To enable password based authentication
+To install Ansible
+# yum install ansible -y 
+
+
+After we setup ansible server need to prepare ansible server to create docker images 
+For tha we need to add DockerHost to Ansible as a managed Node so that our ansible control node can manage docker host.
+For that we need to add dockerip in ansible HOst's inventory file
+# vi /etc/ansible/hosts
+192.168.56.24 
+
+We need to write a play book in our ansible control node and the palybook should run on target docker node  For that we 
+need to add docker host as a managed node to ansible Host .
+
+# To enable this feature we need to do the below 
+# Create  ansadmin 
+# passwd ansadmin
+# Add this ansadmin to sudoers file
+# Enable password based authentication # vi /etc/ssh/sshd_config
+# we need to copy ssh key from ansible server(ansadmin) to docker host's ansadmin to enable the passwdless authentication.
+# ansible -m ping <dockerip> 
+
+
 
 
 

@@ -61,7 +61,7 @@ CMD ["/opt/tomcat/bin/catalina.sh, "run""]
 
 
 ##### To Integrate Docker with Jenkins #######################################################################
-
+-
  	. Create a dockeradmin user
 	. Install "Publish Over SSH" Plugin 
 	. Add dockerhost to Jenkins "Configure system"
@@ -152,5 +152,27 @@ docker rm regapp
 docker run -d --name regapp -p 8081:8081 regapp:v1
 
 save and build it ----!!!
+
+# consise ######################## 
+1) Creating docker host 
+2) Cereating image with Dockerfile 
+3) To integrate Docker with Jenkins 
+	. Create a dockeradmin user
+        . Install "Publish Over SSH" Plugin
+        . Add dockerhost to Jenkins "Configure system"
+
+4) while we create a job , we need to provide the below details:
+In Post Build Action. we need to select the publishOverSSH plugin & the below details as well 
+"publish over-ssh plugin"
+Name: Build and deploy on container
+in post-Build-Action: if we choose this option it will show the available ssh server options , so select docker-host
+----------------------------
+Name: docker-host
+Sourcefile: **/.war*
+Remove Source: webapp/target
+Remote Directory:
+Exec:
+
+
 
 
