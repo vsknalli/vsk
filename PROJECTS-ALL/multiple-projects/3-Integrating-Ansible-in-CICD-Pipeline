@@ -3,7 +3,41 @@
 #####################################
 
 Untill previouse section we were doing changes in our workstation then commiting changes from git to GitHub
-Once Latest code available on git Jenkins could above to pull the latest code and build it with the help of maven and 
+Once Latest code available on gitHub Jenkins could above to pull the latest code and build it with the help of maven and 
 it was creating docker images and docker container on docker Host.
+  In this case Jenkins will be acting as a Build and Deployment Tool, But is there any better way to Handle it , YES 
+Thats is where we introduce deployment tool Ansible along with DockerHub
+
+Our applications are containerized at this moment we need repository 
+if in case it is not containerized application (i mean wehich we may directory deployed on vm) we can uses nexus or artifactory.
+But we have reached containarized level thats is the reason we are going to use docker Hub.
+
+With the Help of Ansible and DockerHub we are going to make this cicd more smoother.
+########
+In this case--> Jenkins is going to take the code from GitHUb --> Build Artifacts & copy thos artifacts on to AnsibleServer
+Now it is Ansible tasks to create images and deploy the containers
+Ansible is going to take the artifact and with the help of Dockerfile creats a docker image
+This docker image we can commit into docker-Hub becuase dockerHub is repository to store docker images
+Whenever we execute any ansible play book to deploy a container docker host (destination server) communicates with 
+dockerHub pull the image whatever we mentioned in our playbook and create a container our of it .
+######
+
+"Ansible Installation"
+=======================
+	1) Bring the server
+	2) setup Hostname
+	3) Create ansadmin User
+	4) Add users to sudoers file
+	5) Generate SSH Keys
+	6) Enable password passed login
+	7) Install Ansible
+
+
+
+
+
+
+
+
 
 
