@@ -1,1 +1,9 @@
-1
+####################################
+ Using Ansible to Create Containers:
+#####################################
+
+Untill previouse section we were doing changes in our workstation then commiting changes from git to GitHub
+Once Latest code available on git Jenkins could above to pull the latest code and build it with the help of maven and 
+it was creating docker images and docker container on docker Host.
+
+

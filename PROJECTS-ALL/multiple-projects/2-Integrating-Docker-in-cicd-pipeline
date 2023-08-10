@@ -134,7 +134,7 @@ we did id manually if we want to automatically we need to , edit the same job in
 edit -> Build deploy on docker-container job -> configure -> postbuild - Exec Command  
 cd /opt/docker;
 docker build -t regapp:v1 .
-docker run -d --name regapp:v1 -p 8081:8081 regapp:v1 
+docker run -d --name regapp -p 8081:8081 regapp:v1 
 # Notes:-----------------------------------------------------------------------
 beore executing docker run delete unnessary images and container in docker host
 docker image prune -a
@@ -142,31 +142,15 @@ docker conainer prune
 -----------------------------------------------------------------------------
 Now we can access the application in web GUI 
 
-# if you Rerun the same job it get failed becuse alrady in the same name containe available to avaid this we need to do 
+# if you Rerun the same job  build is successful but while it deploying it on docker its get failed becuse alrady in the same name containe available to avaid this we need to do 
 # some modifications in the same job in post-Bild: Exec column 
 
+cd /opt/docker;
+docker build -t regapp:v1 .
+docker stop regapp
+docker rm regapp
+docker run -d --name regapp -p 8081:8081 regapp:v1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+save and build it ----!!!
 
 
