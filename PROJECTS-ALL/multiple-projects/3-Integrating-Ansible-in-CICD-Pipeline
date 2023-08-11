@@ -170,7 +170,7 @@ vi regapp.yaml
 Till now we have created the docker image by using ansible-playbook,and the image is available on ansible server ,  The next is need to push the docker image from Ansible-server to dockerHub.
 so that our doker server able to pull the image and create container out of it .
 
-#### Copy image from Ansible-server to DockerHub ########
+#### Usning Ansible to create imaeg and Copy image from Ansible-server to DockerHub ########
  Till the above what we have done is we have created an docker image with the help of Ansible-playbom on ansible-server
 and tag the image and push the image to docker-Hub Manually . so to automate we have goting to add some steps in 
 ansible-playbook to tag and push the image to DockerHub repository
@@ -191,6 +191,63 @@ vi reapp.yml
     command: docker push vsknalli/regapp:latest 
  
      
+#### Unsing Ansible Creating Container on destination Docker Host ###############################
+
+Now we need to create one ansible-playbook to create container on DockerHost(Our destination Host)
+and the docker-Host understand we need to pull the image from dockerHub 
+and Create a container out of it.....!!!
+# vi deploy_regapp.yml
+
+In ansible-server : we need to create deplpy-regapp.yml 
+---
+- hosts: docker
+  tasks:
+  - name: Create container 
+    command: docker run -d --name regapp-server -p 8082:8080 vsknalli/regapp:latest
+#-----------------------
+
+When we run fist time it will run sucessfully but when we tried the secound time , we got the error stating that "the container name is already usedby another container" to overcome this problem  either we need to remove this container or 
+change the name 
+
+	> Remove the existing container
+	> Rmove existing image
+	> Create a New container
+These are the instruction we are going to incorporate in the Ansible-playbook.
+Once done we will add this Deployment ansible playbook into Jenkins so that our Jenkins can take care of entire CICD 
+
+# This playbook stop the existing container & Remove it and create a new container with latest tag #####
+---
+- hosts: docker
+  tasks:
+  - name: Stop existing container
+    command: docker stop regapp-server
+    ignore_errors: yes
+
+  - name: Remve the container 
+    command: docker rm regapp-server
+    ignore_errors: yes
+
+  - name: Remove image
+    command: docker rmi vsknalli/regapp:latest
+    ignore_errors: yes
+
+  - name: Create container 
+    command: docker run -d --name regapp-server -p 8082:8080 vsknalli/regapp:latest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
