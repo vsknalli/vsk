@@ -61,6 +61,136 @@ need to add docker host as a managed node to ansible Host .
 # ansible -m ping <dockerip> 
 
 
+##############  CONSISE ##################
+On Docker Host		     On Ansible Host
+--------------	             ----------------
+Creaet ansadmin		     Add Host files	
+add ansadmin in sudoers	     Copy SSH keys
+Enable password login	     Test the connection
+
+AnsibleHost (ansadmin) can able to commnicate with docker without any credenstials
+
+
+
+#### INTEGRATE ANSIBLE WITH JENKINS ##############
+We shoud integrate Ansible with Jenkins , So that jenkins able to copy Artifact to Ansible Server 
+Ansible can able to create image and deploy container on DockerHost
+
+By doing this Jenkins will take care only Build actities and Ansible can take care Deployment Activities
+To integrate ansible server with jenkings we need to follow the same we did earlier for intergrate docker with jenkins
+so for that what we did installed "Publish over ssh" plugin and already availble 
+Only thing we need to "configure system" and add our ansible 
+So that jenkins could able to communicate with ansible with whatever the credentials we provided in "configure systems"
+
+Add our ansible to jenkins:
+---------------------------
+Go to Jenkins GUI --> manage jenkins -> Configure system --> Go to publish over ssh --> Add ssh to Ansible system
+Provide the below details:
+Name: Ansible-server 
+HOstname: 192.168.56.23 (Ansible IP)
+Username: ansadmin
+Advanced -> click use password authentictation -> provide password of ansadadmin-user 
+##### Testconnection ######
+
+Now we are going to create a New Jenkins JOB where we can Build and copy the artifact into ansible system
+
+Name: copy artifacts onto -Ansibleserver
+Copy from : Build and deploy on COntainer
+
+Go to Post-Build-Action -> Remove docker and add ansible serve credentisls
+source fle : same
+Removeprefix : same 
+Remote Directory: //opt/docker
+remove allthe commands available in Exec coloumn all docker commands 
+
+#Save and RUN the job 
+
+
+Note in Ansible server please check it create or not 
+----------------------------------------------------
+in Ansible server please create the directory and assign the permission 
+mkdir /opt/docker
+sudo chown ansadmin:ansadmin /opt/docker
+
+
+# In previouse we have integrated our ansible with jenkins and copied artifacts by jenkins job to ansible server /opt/docker
+# directory .
+#
+# Now its time to create docker-image with the help of Artifacts which we have copied on to Ansible-server
+# This activity we have done previousely on our docker-host same think we we are going to do 
+For that we have installed docker on our Ansible-server , we haven't done yet 
+Going to install docker on ansible-server-> 
+# sudo yum install docker 
+Now in this ansible-server we need to add this ansadmin to docker group Then only we can execute docker commands
+# usermod -aG docker ansadmin 
+# systemctl status docker
+# systemctl start docker
+#pwd
+#/opt/docker
+#vi Dockerfile
+vi Dockerfile
+FROM tomcat:latest
+RUN cp -R /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+COPY ./*.war /usr/local/tomcat/webapps 
+
+# docker build -t regapp:v1 . -> . for current directory
+# docker run -d --name regapp-server -p 8081:8080 regapp:v1 
+
+	
+USNING ANSIBLE TO CREATE CONTAINER
+==================================
+Now the image is available on Ansible system
+we need to make available on docker target system, This is where docker-hub comes into picture because 
+Once created the image on ansible server from there we need to push the image to docker-Hub 
+From DockerHub the image can be accessible by any docker system 
+From ansible-server we can instruct the docker-system go and pull the image from docker-Hub & create a container
+This how docker host pull the image and create a container out of it ....!!!
+
+
+1) login to ansible-server to create a playbook to create an image 
+sudo su - ansadmin
+cd /opt/docker 
+Here we shoule have Dockerfile and webapp.war file 
+Here the requrement is the target server is ansible server itself , so we need to update ansible inventory file - ansible-host
+[docker-host]
+192.168.56.24
+[ansible-host]
+192.168.56.23
+
+in ansible server - we are in below /opt/docker directory right now. Here we are going to create regapp.yaml playbook
+vi regapp.yaml
+---
+- hosts: ansible-host
+  become: true
+  tasks:
+    - name: Create docker image 
+      command: docker build -t regapp:latest .
+      args:
+        chdir: /opt/docker
+Till now we have created the docker image by using ansible-playbook,and the image is available on ansible server ,  The next is need to push the docker image from Ansible-server to dockerHub.
+so that our doker server able to pull the image and create container out of it .
+
+#### Copy image from Ansible-server to DockerHub ########
+ Till the above what we have done is we have created an docker image with the help of Ansible-playbom on ansible-server
+and tag the image and push the image to docker-Hub Manually . so to automate we have goting to add some steps in 
+ansible-playbook to tag and push the image to DockerHub repository
+
+login to the ansible server go to /opt/docker 
+vi reapp.yml
+---
+- hosts: ansible
+  tasks:
+  - name: create docker image
+    command: docker build -t regapp:latest .
+    args:
+      chdir: /opt/docker
+  - name: Create tag to push image into dockerHub
+    command: docker tag regapp:latest vsknalli/regapp:latest
+
+  - name: push docker image 
+    command: docker push vsknalli/regapp:latest 
+ 
+     
 
 
 
@@ -70,3 +200,4 @@ need to add docker host as a managed node to ansible Host .
 
 
 
+ 
