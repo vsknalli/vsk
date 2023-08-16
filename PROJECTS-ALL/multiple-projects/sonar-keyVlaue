@@ -1,9 +1,0 @@
-sonar.verbose=true
-sonar.organaization=velaxy-key
-sonar.projectkey=velaxy-key	
-sonar.projectName=IBM
-sonar.language=java
-sonar.sourceEncoding=UTF-8
-sonar.source=.
-sonar.java.binaries=target/classes
-sonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
