@@ -46,7 +46,7 @@ Vagrant.configure("2") do |config|
     ansible.vm.hostname = "node04"
     ansible.vm.network "private_network", ip: "192.168.56.94"
     ansible.vm.provider "virtualbox" do |vb|
-     vb.memory = "10.4"
+     vb.memory = "1024"
    end
   end
 
