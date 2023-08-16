@@ -1,0 +1,52 @@
+                               #########################   RHCE-EX294  ##########################
+# CONTENT:
+
+1- Introduction
+# What is Ansible?
+	Ansible is an opensource software provisioning, configuration management, and application deployment tool 
+enabling infrastructure as a code.
+	Ansible is a free automation tool that can automate IT tasks on local machines where it is running and 
+on remote machines.
+
+# Few example of tasks that can be automated by Ansible:
+---------------------------------------------------------
+#	1) Provisioning:
+#	     - Bare-metal servers
+#	     - Virtual Machines
+#	     - Netork devices
+#	     - Storage systems
+#	     - Cloud platform
+#      2) System Configuration Management:
+#            - Update & Upgrades
+#            - Package Installtion
+#            - Service Configuration
+#            - Stop|Start|Restart of Services
+#            - Users and Groups
+#            - Assigning Permission to files and directories
+#     3) Application Deployment:
+#            - Backups 
+#            - Weekly and Monthly system reboots
+#            - Orchestration
+Note: Ansible project was started in 2012 by "Michael DeHaan"
+      Ansible Inc was purchased by RedHat in 2015 
+
+
+# Benifies of Ansible:
+=====================
+#	> Agentless...!!!
+#	> Open-Source
+#	> Avoid human erros
+#	> Save time by automating repetitive or tedious taks
+#	> Once you save your time it increase the productivity, we can focuse on other taks 
+#	> Easy to use 
+#	> Simple (Playbooks are Human readable text files)
+#	> Secure (Over-SSH)
+#	> Provide pre-written Module
+#	> Easy to Learn (as long as you have Good Instructor)
+#	> Great Product for Orchestration
+#	> Ansible can be user not only for system but also for Network, Storage, Cloud etc.
+#	> Provide approx 1300 modules and 4000 modules on Galaxy 
+#	> Huge Online Resources
+
+
+#    

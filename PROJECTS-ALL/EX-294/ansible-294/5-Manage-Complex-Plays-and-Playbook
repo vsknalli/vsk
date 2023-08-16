@@ -1,0 +1,67 @@
+                               #########################   RHCE-EX294  ##########################
+# CONTENT:
+
+1- Introduction
+2- Introduce to Ansible
+	What is ansible and its background
+	Benifits and key terms of ansible
+	How Ansible Automation works
+	Lab Design
+	Install Oracle Virtual Box and Ansible-setup
+	Install ansible
+	Ansible configuration file
+	Yaml syntax and example	
+3- Ansible Playbook and implementaion
+	Writing First Playbook
+	Output Playbook
+	Creating Multiple task playbook
+	Install and start service from playbook
+	Hosts file syntax
+	Setup Connection on Remtote Clients
+	Remote Clients Connectivity Status
+4- Deploy Files to Managed Hosts and clients
+	Copy Files to Remote Clients
+	Change File permission 
+	Check Files or Directory Status
+	Create Dir/File and Remove file
+	Create a File and add Text
+
+5- Manage Complex Plays and Playbook
+	Setup Apache and Open Firewall Port
+	Run Shell Scripts on Remote clients
+	Schedule a Job (Cron)
+	Download a package from URL
+	Create and Mount a new storage
+	
+6- AUtomate Linux Adminstration Tasks
+	User account management
+	Add or udpate user password
+	Kill a running process
+
+7- Implement Tasks control 
+	Pick and choose steps
+	Ansible ad-hoc commands (Part-1)
+        Ansible ad-hoc commands (Part-2)
+        Ansible ad-hoc commands (Part-3)
+	Handlers
+	Conditions
+	Loops
+	
+8- Simply Playbook with Roles
+	Ansible Roles
+	Roles by Application
+	Roles an Ansible Galaxy 
+
+9- Variable Facts and Additional Features
+	Tags
+	Variables
+	Variables in in ventory Files
+	Ansible Vault
+	Engrept stings within playbook
+	
+10- Ansible Tools and Resources
+	Other Automation Tools
+	Free Source Ansible and Redhat Ansible
+	Ansible AIX and Tower 
+	Ansible additional commands
+	Documentation and community help
