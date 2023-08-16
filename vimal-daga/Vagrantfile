@@ -1,0 +1,66 @@
+Vagrant.configure("2") do |config|
+#  config.hostmanager.enabled = true 
+#  config.hostmanager.manage_host = true
+  
+## Ansible-c VM ###
+
+  config.vm.define "ansible-c" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "ansible-c"
+    ansible.vm.network "private_network", ip: "192.168.56.90"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "2048"
+   end
+  end
+
+### Node01 vm ###
+  config.vm.define "node01" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "node01"
+    ansible.vm.network "private_network", ip: "192.168.56.91"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end   
+### Node02 vm  ####
+    config.vm.define "node02" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "node02"
+    ansible.vm.network "private_network", ip: "192.168.56.92"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end
+### NOde03 vm  #### 
+  config.vm.define "node03" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "node03"
+    ansible.vm.network "private_network", ip: "192.168.56.93"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end
+### Node04 vm  ####
+  config.vm.define "node04" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "node04"
+    ansible.vm.network "private_network", ip: "192.168.56.94"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end
+
+### Node05 vm  ####
+  config.vm.define "node05" do |ansible|
+    ansible.vm.box = "generic/rhel9"
+    ansible.vm.hostname = "node05"
+    ansible.vm.network "private_network", ip: "192.168.56.95"
+    ansible.vm.provider "virtualbox" do |vb|
+     vb.memory = "1024"
+   end
+  end
+
+
+ end
+
+
