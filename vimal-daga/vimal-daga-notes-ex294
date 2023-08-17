@@ -3,8 +3,16 @@
 ### Ansible Automation Platform -- RH294 ##################
 
 "Automation For EveryOne"
+------------------------
+ansible all -m ping 
+all -> Where you want 
+-m ping -> What you want 
+-------------------------
 
-
+PermitRootLogin yes
+PubkeyAuthentication yes
+PasswordAuthentication no
+AuthorizedKeysFile .ssh/authorized_keys
 
 
 
