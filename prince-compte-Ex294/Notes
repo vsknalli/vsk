@@ -1,0 +1,111 @@
+# Lab setup #
+-------------------------------
+# ssh-keygen -t rsa
+# for host 1 2 3 
+# > do
+# > ssh-copy-id mhost$host
+# > done
+------------------------------
+
+"Core components of Ansible"
+-----------------------------------------------------------------------------------------------
+# Ansible Configuration file -> Define Varies default values to be used by Ansible
+# Ansible inventories        -> Define hosts and group of hosts managed by Ansible
+# Ansible module             -> Small python program which is desgned to specifiy some tasks 
+# Ansible Variable           -> Variables used in Playbook
+# Ansible Facts              -> Data about remote systems gathered by Ansible
+# Ansible plays              -> 
+# Ansible playbook           -> List of ansible plays 
+-------------------------------------------------------------------------------------------------
+
+"Exploring Ansible Config Files"
+-------------------------------------------------------------
+ANSIBLE_CONFIG              ---> Environment Variable if set 
+ansibler.cfg                 ---> In current working directory
+~/.ansible.cfg              ---> User's home directory
+/etc/ansible/ansible.cfg    ---> System wide directory
+-------------------------------------------------------------
+pwd
+/home/ansadmin
+touch /tmp/ansible.cfg - Env set 
+touch .ansible.cfg - User's home directory the . indicaets
+touch ansible.cfg - current working directory means
+so we have created two config files the one is /tmp and /home/ansadmin & 
+Now exporting the ENVIRONMENT VARIABLE
+"export ANSIBLE_CONFIG=/tmp/ansible.cfg"
+ansible --version -> This Environment Variable have higher presitance 
+"unset ANSIBLE_CONFIG"
+ansible --version
+Now it shows in home/ansadmin/".ansible.cfg" file because this is 2nd Highest presitance
+If we delete .ansible.cfg and run ansible --version it will show current working directory "ansible.cfg"
+If we delte both files in ansible --version shows system wide dirctory
+Incase if we delete /etc/ansible/ansible.cfg -? if we enter ansible --version it shows config field "None"
+
+in V9-ex294 -> we can initilize the ansible config file like the below 
+$ ansible-config init --disabled > ansible.cfg
+
+in ansible.cfg 
+
+[defaults]
+inventory=
+forks=5
+remote_port=22
+roles_path
+host_key_checking = False  -> should be False
+remote_user = ansadmin -> need to establish ssh connection for this user if your set this directive 
+module_name=command 
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+
+[colors]
+
+----------------------------------------------------------------------------------------------------------------------------
+
+# 3.Important Defaults Used By Ansible 
+======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
