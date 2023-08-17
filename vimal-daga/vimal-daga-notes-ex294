@@ -2,6 +2,9 @@
 
 ### Ansible Automation Platform -- RH294 ##################
 
+"INTRODUCTION":
+===============
+
 "Automation For EveryOne"
 ------------------------
 ansible all -m ping 
@@ -13,6 +16,12 @@ PermitRootLogin yes
 PubkeyAuthentication yes
 PasswordAuthentication no
 AuthorizedKeysFile .ssh/authorized_keys
+
+# "AAP- Ansible Automation Platform"
+------------------------------------
+
+What you want to achive and 
+where you want to do 
 
 
 
