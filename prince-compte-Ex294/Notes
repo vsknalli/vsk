@@ -1,11 +1,66 @@
 # Lab setup #  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 
+
+
+#Exam:
+-------------------------------------
+Understand and use essential tools
+Operate running systems
+Configure local storage
+Create and Configure file system
+Deploy,Configure and maintain systems
+Manage Users and Groups
+Manage security
+-------------------------------------
+# Understand the core cocept of Ansible:
+Inventories
+Variables
+Modules
+Facts
+Plays
+Playbooks
+Configuration files
+
 -------------------------------
+# Configure Network
+
+nmtui -> Edit connection -> enp0s3 -> Edit -> ipv4-Manual -> show and add IP address 192.168.56.10/24 - Automatically connect need to select -> ok -> Back -> Activate-Connection -> Back - setHostname -> ansible-c.example.com -> ok ->Quit 
+
+To verify Hostname and Hostname resolution
+# getent hosts mhost1.example.com
+
+"Installing Ansible on Controll Node":
+-----------------------------------------------------------
+dnf install epel-release	To make epel available
+-----------------------------------------------------------
+dnf provides ansible 		To display ansible packages
+-----------------------------------------------------------
+dnf install ansible		Installing Ansible
+-----------------------------------------------------------
+ansible --version		Displying Ansible Version
+-----------------------------------------------------------
+
+"LAB-SETUP"
+==============
+# Next we need to setup ssh key authentication between Ansible-c &  other nodes
+
+SSH key authentication for root user
+------------------------------------
+First we need to check whether we can able to connect remote node as root user after entering password
+ssh -l root mhost1
+if not able to login we need to edit /etc/ssh/sshd_config file in remote hosts
+:/Password
+:/Permit
+
 # ssh-keygen -t rsa
-# for host 1 2 3 
+# for host in 1 2 3 
 # > do
 # > ssh-copy-id mhost$host
 # > done
 ------------------------------
+After we did this configuration we can able to login to all the managed nodes from Ansible-c node without password as a root.
+
+LAB-Setup COmpleted.....!!!!
+
 
 "Core components of Ansible"
 -----------------------------------------------------------------------------------------------
@@ -64,9 +119,193 @@ become_ask_pass=False
 [colors]
 
 ----------------------------------------------------------------------------------------------------------------------------
+After add host entry in inventory file to validate 
+
+# ansible mygroup --list-hosts
+# ansible all --list-hosts
+
+
+
+"With Password"
+===============
+# ansible all -m lineinfile -a "path=/etc/sudoers state=present line='ansadmin ALL=(ALL) ALL' backup=yes validate='/usr/sbin/visudo -cf %s'" -u root
+
+# ansible all -m lineinfile -a "path=/etc/sudoers state=absent line='ansadmin ALL=(ALL) ALL' backup=yes validate='/usr/sbin/visudo -cf %s'" -u root
+
+"WithOut Password"
+=================
+# ansible all -m lineinfile -a "path=/etc/sudoers state=present line='ansadmin ALL=(ALL) NOPASSWD: ALL' backup=yes validate='/usr/sbin/visudo -cf %s'" -u root
+----------------------------------------------------------------------------------------------------------------------------
+Display Banner on Managed NOdes:
+---------------------------------
+$ ansible all -m copy -a "content='Welcome to Ansible Managed Nods'  dest=/etc/motd" --become 
+
+
 
 # 3.Important Defaults Used By Ansible 
 ======================================
+
+# To define Host and Group Variables:
+=====================================
+To define "Hostvars" Create a file with the same as that of host
+ex: "Define variable in inventory file"
+vi /home/ansadmin/inventory
+[hgroup1]
+mhost1 ansible_user=ansadmin ansible_port=555 -> Host Variable
+mhost2
+
+[hgroup2]
+mhost4
+mhost5
+
+[group2:vars]
+ansible_user=ansadmin  --> Group Variable
+
+"Store variable in seperate file:"Cereate a file with the name of host itself
+----------------------------------------
+/home/ansadmin/inventory/host_vars/mhost1 
+---
+ansible_user: ansadmin
+ansible_port: 22
+:wq
+-----------------------------------------
+/home/ansadmin/inventory/group_vars/
+Create a file name same as group name below group_vars folder
+vi hgroup2
+ansible_user: ansadmin
+ansible_port: 555
+-----------------------------------------
+
+"Display all the available modules and information about modules"
+---------------------------------------------------------------------------
+# ansible-doc -l  -> list all available module
+# ansible-doc -l | grep ^win     --> To display all windows modules
+# ansible-doc -l | grep v ^win   --> Display all module execpt windows module
+# ansible-doc -l | grep ^file    --> Display module stars with the name file
+# ansible-doc ping   --> All the information about specific ansible  module - This is your Good Firend in exam. 
+-----------------------------------------------------------------------------
+
+
+"ANSBLE AD-HOC COMMANDS"
+=======================
+---------------------------------------------------------------------
+ansible mhost1 -m command -a "cat /etc/hosts"
+ansble mhost1 -m copy -a "src=/etc/hosts dest=/tmp/hostsfile_backup"
+ansible mhost2 -m file -a "path=/tmp/test state=touch"
+ansible mhost3 -m user -a "name=test state=present"
+----------------------------------------------------------------------
+
+"ANSIBLE PLAY AND PLAYBOOKS"
+===========================
+Playbook comprsing different plays
+Play contains below sections:
+-----------------------------
+"hosts"----------> To define target of the play and other directives like remote_user, become, gather_facts ...etc
+"vars"-----------> To define variables
+"tasks"----------> To define list of tasks to be executed
+"handlers"-------> some task to be executed on successful change due to some other task in the section(task to run only when a change is made & successfull  on a machine)
+"roles"----------> Roles to be included in the play
+
+"ANSIBLE-VARIABLES"
+==================
+	We know ansible written in YAML.
+YAML supports dictionary variables, list variables and complex variable(Using dictionaries and List Both)
+Dictionary Variable--> Key look for values 
+# 13) Simple  Dictionary Variable example:
+-------------------------------------------------------------------------------------------
+vars:
+    key: value
+
+1) If we want to prit the assigned value in playbook with "jinja2" expresstion "{{key}}".
+2) We will display the variable using "debug" module in playbook.
+-------------------------------------------------------------------------------------------
+# 14) Named dictionary Variable:
+The difference is only the name
+
+vars:
+  dict:
+    key1: value1
+    key2: value2
+
+we can user jinja2 expression to print the assigned value in playbook
+"{{dict}}"            ----> TO display/assigned the all values on the name
+"{{dict	.key1}}"      ---> TO assign key1 value using dot notation
+"{{dict['key1']}}"    ---> TO assing key1 value using bracket notation
+
+- hosts: mhost1
+  vars:
+    dict:
+      key1: value1
+      key2: value2
+	
+# 15) Named List Variable:
+
+vars:
+    list:
+      - item1
+      - item2
+      - item3
+
+
+Jinja2 expression to reference variable in playbook
+"{{ list} }"
+"{{ list.0 }}"
+"{{list [2] }}"
+
+
+# 16) Mixed Variables(Dict+List) with Playbook-Complex Variable:
+
+vars:
+   users:
+     - name: Mark
+       age: 35
+     - name: lisa
+       age: 32
+
+Jinja2 experssion to reference variable in playbook
+"{{ users }}"   -> To display list variables
+"{{ users[0] }}" -> To display first item of the list
+"{{ users[0].name }}" -> To display name in first list item.
+"{{ users[0]['name'] }}"  -> To display name in first list itemA
+
+
+# 17) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
