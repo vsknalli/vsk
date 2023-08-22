@@ -205,12 +205,14 @@ Play contains below sections:
 "tasks"----------> To define list of tasks to be executed
 "handlers"-------> some task to be executed on successful change due to some other task in the section(task to run only when a change is made & successfull  on a machine)
 "roles"----------> Roles to be included in the play
+===============================================================================================================================
 
-"ANSIBLE-VARIABLES"
-==================
-	We know ansible written in YAML.
+						"ANSIBLE-VARIABLES"
+						===================
+We know ansible written in YAML.
 YAML supports dictionary variables, list variables and complex variable(Using dictionaries and List Both)
 Dictionary Variable--> Key look for values 
+
 # 13) Simple  Dictionary Variable example:
 -------------------------------------------------------------------------------------------
 vars:
@@ -218,6 +220,16 @@ vars:
 
 1) If we want to prit the assigned value in playbook with "jinja2" expresstion "{{key}}".
 2) We will display the variable using "debug" module in playbook.
+--------------------------------------------
+- hosts: mhost1
+  gather_facts: False
+  vars:
+      username: My-name-SenthilKumar 
+  tasks:
+    - name: Displaying variable value
+      debug:
+        msg: "{{username}}"
+---------------------------------------------
 -------------------------------------------------------------------------------------------
 # 14) Named dictionary Variable:
 The difference is only the name
@@ -232,12 +244,29 @@ we can user jinja2 expression to print the assigned value in playbook
 "{{dict	.key1}}"      ---> TO assign key1 value using dot notation
 "{{dict['key1']}}"    ---> TO assing key1 value using bracket notation
 
+# Example:
+-----------------------------------------------
 - hosts: mhost1
   vars:
     dict:
       key1: value1
       key2: value2
 	
+- hosts: mhost1
+  gather_facts: False
+  vars:
+      dict:
+        key1: value1
+        key2: value2
+
+  tasks:
+    - name: Displaying variable value
+      debug:
+        msg: "{{ dict.key2 }}"
+------------------------------------------
+====================================================================================================
+
+
 # 15) Named List Variable:
 
 vars:
@@ -245,14 +274,30 @@ vars:
       - item1
       - item2
       - item3
+--------------------------------------------
+"Example":
+==========
+- hosts: mhost1	
+  gather_facts: False
+  vars:
+      users:
+        - name: Mark
+          age: 35
+        - name: List
+          age: 30
 
+  tasks:
+    - name: Displaying variable value
+      debug:
+        msg: "{{ users[0]['age'] }}
+-------------------------------------------
 
 Jinja2 expression to reference variable in playbook
 "{{ list} }"
 "{{ list.0 }}"
 "{{list [2] }}"
 
-
+==================================================================================
 # 16) Mixed Variables(Dict+List) with Playbook-Complex Variable:
 
 vars:
@@ -267,20 +312,181 @@ Jinja2 experssion to reference variable in playbook
 "{{ users[0] }}" -> To display first item of the list
 "{{ users[0].name }}" -> To display name in first list item.
 "{{ users[0]['name'] }}"  -> To display name in first list itemA
+---------------------------------------
+- hosts: mhost1
+  gather_facts: False
+  vars:
+      users:
+        - name: Mark
+          age: 35
+        - name: List
+          age: 30
+
+  tasks:
+    - name: Displaying variable value
+      debug:
+        msg: "{{ users[0]['age'] }}
+---------------------------------------
+=============================================================================================
+# 17) Using YAML file to define variable:
+
+vars_files:
+	- vars_file.yaml
+
+"vim vars_files"
+---
+users:
+     - name: Mark
+       age: 40
+     - name: List
+       age: 35
+---
+
+
+jinja2 expressions to reference variable in playbook.
+
+"{{ users }}"   -> To display list variables
+"{{ users[0] }}" -> To display first item of the list
+"{{ users[0].name }}" -> To display name in first list item.
+"{{ users[0]['name'] }}"  -> To display name in first list itemA
+
+#----------------------------------------
+- hosts: mhost1
+  gather_facts: False
+  vars_files:
+        - vars_file.yml 
+
+  tasks:
+    - name: Displaying variable value
+      debug:
+        msg: "{{ users }}"
+-----------------------------------------
+=====================================================================================
+
+# Variable provided during playbook excution:
+=============================================
+
+vars_prompt:
+	- name: var
+	  prompt: Enter variable
+	  private: no
+
+jinja2 expression to reference variables in playbook
+"{{ var }}" - To display Variable
+
+
+Example:
+========
+
+- hosts: mhost1
+  gather_facts: False
+  vars_prompt:
+        - name: var
+          prompt: Enter Variable
+          private: No
+
+  tasks:
+        - name: Display Variable
+          debug:
+               msg: "{{ var }}"
+
+Example-2:
+=========
+- hosts: mhost1
+  gather_facts: False
+  vars_prompt:
+        - name: username 
+          prompt: Enter UserName
+          private: No
+
+  tasks:
+        - name: Create User
+          user:
+               name: "{{ username }}"
+               state: present
+=============================================================================================================================
+#			                         "ANSIBLE FACTS"
+                                                 ==============
+Ansible facts are data/information related to your remote systems like OS,IP address aggigned on different interfaces, 
+Hostname, disk , file system and more.
+we can access this data in the ansible_facts variable
+We can display ansible facts using "setup" module using ansible ad-hoc command
+# ansible mhost1 -m setup 
+# ansible mhost1 -m setup -a "filter=ansible....."
+#
 
+Note: keep in mind normal users can not display complete information of remote hosts, Execute command as root user to display
+information about remote systems or with --become flack with normal user.
 
-# 17) 
+# ansible mhost1 -m setup 
 
+In this setup module output on top-level we can see "ansible_facts" ---> Dictionary Variable - { - shows it dictionary 
+further iteam with contains more dictionary iteams , list items and key:value pairs 
 
+We can access different types of variables
 
+Suppose if we want to print IP address of this mhost1 
 
+We can create one simple playbook to understand facts variable , 
+#PlayBook:
+------------------------------------------------------------------
+- hosts: mhost1
+  become: true
+  tasks:
+      - name: Displaying facts variables
+        debug:
+          msg: "{{ ansible_facts.all_ipv4_addresses[2] }}"
+          msg: "{{ ansible_nodename}}"                  ---- display nodename
+          msg: "{{ ansible_facts.nodename }}"           ---- display nodename
+          mst: "{{ ansible_facts['nodename'] }}"        ---- display nodename 
 
+-------------------------------------------------------------------
+#Ad-hoc:
+========
+# $ ansible mhost1 -m setup | grep ansible_   -> Here we can find many simple dictionary variable in the output
+  "ansible_memfree_mb": 154,
+        "ansible_memory_mb": {
+        "ansible_memtotal_mb": 757,
+        "ansible_mounts": [
+        "ansible_nodename": "mhost1.example.com",
+        "ansible_os_family": "RedHat",
 
+# $ ansible mhost1 -m setup -a "filter=ansible_nodename"
+# $ ansible mhost1 -m setup -a "filter=ansible_all_ipv4_addresses"
 
+ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "192.168.100.95",
+            "10.0.2.15",
+            "192.168.56.11"
+===============================================================================================================================
+#			        	SYSTEM ADMININSTRATION TASKS	
+					============================
+=================================
+"Softwae Packages and repository"
+"Services"
+"Firewall Rules"
+"File system"
+"Sotrage System"
+"File Content"
+"Archiving"
+"Scheduled Tasks"
+"Security"
+"User and Groups"
+===================================
 
+# Managing Services
 
+Tasks:
+	Install httpd service on webservers node
+	Install mariadb service on prod node
+	Make sure services are started and enables
 
 
+"$ ansible localhost -m debug -a "var=vars"  ---Magical Variable of the control node to mange managed nodes 
+This is totally different from setup module , 
+"$ ansible localhost -m setup"
+"$ ansible localhost -m setup | grep ansible_" 
 
 
 
@@ -297,6 +503,7 @@ Jinja2 experssion to reference variable in playbook
 
 
 
+				
 
 
 
@@ -324,27 +531,7 @@ Jinja2 experssion to reference variable in playbook
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			                         
 
 
 

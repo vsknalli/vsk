@@ -1,0 +1,139 @@
+#				Ansible Questions and Answers
+			       ===============================
+==========================
+vim /home/catherine/.vimrc
+set ai
+set tc=2
+set et
+set cursorcolumn
+==========================
+
+
+Q1) Install and configure Ansible on controll.example.com
+Create a Static inventory file called /home/catherine/ansible/inventory so that 
+"node1" is a member of "dev" host group
+"node2" is a member of "test" host group 
+"node3" and "node4" are member of "prod" host group 
+"node5" is a member of "webservers" host group 
+The "prod" group is the member of the "webervers" host group 
+# Create a configuration file called /home/catherine/ansible/ansible.cfg
+# The Host inventory file is /home/catherine/ansible/inventory
+# The default collections directory is /home/catherine/ansible/mycollection
+# The default roles directoryis /home/catherine/ansible/roles
+
+$ yum install ansible-core -y 
+$ yum install ansible-navigator
+$ mkdir /home/catherine/ansible/inventory
+$ mkdir /home/catherine/ansible/ansible.cfg
+$ mkdir /home/catherine/ansible/mycollection
+$ mkdir /home/catherine/ansible/role
+
+# ansible-config init --disabled > ansible.cfg
+
+To Validate all:
+$ ansible all -m ping 
+$ ansible all -a "id"  -> it should shows the root user 
+$ ansible-galaxy role list
+$ ansible-galaxy collection list 
+
+#==============================================================================================================================
+
+Q2) Install a Collection
+
+Install the following collection artifacts available from https://rhgls.sector1.example.com/materials to ansible-c.example.com
+at the catherine 
+"redhat-rhel_system_roles-1.156.2.tar.gx"
+"ansible-posix-1.4.0.tar.gz"
+"community-getneral-4.3.0.tar.gz"
+The collections should be installed into default collection directory /home/catherine/ansible/mycollections
+# yum install wget -y 
+# wget https://galaxy.ansible.com/download/ansible-posix-1.5.4.tar.gz
+# ansible-galaxy collection install ansible-posix-1.5.4.tar.gx -p mycollections
+
+# wget https://galaxy.ansible.com/download/community-general-7.3.0.tar.gz
+# ansible-galaxy collection install community-general-7.3.0.tar.gz -p mycollections
+
+# yum install rhel-system-roles 
+
+To validate:
+============
+$ ansible-galaxy collection list
+$ ansible-glaxy role list
+# ============================================================================================================================
+
+Q3) Create a playbook yum.yml to crate a yum repository on each of the managed nodes as follows
+Note: Need to create 2 repos(BaseOS and AppStream) on mangeded node side.
+
+- hosts: mhost1
+  become: true
+  tasks:
+    - yum_repository:
+        name: "Appstream"
+        baseurl: "///home/senthil/AppStream/"
+        description: "Appstream Repos"
+        enabled: yes
+        gpgcheck: no
+
+    - yum_repository:
+        name: "BaseOS"
+        baseurl: "///home/senhil/BaseOS"
+        description: "Base OS Repo"
+        enabled: yes
+        gpgcheck: no
+#============================================================================================================================
+
+Q4) Create a playbook called /home/catherine/ansible/packages.yml that 
+- Install the php and mariadb packages on hosts in the dev,test and prod host groups
+- Install RPM Development Tools package group on the hosts in the dev host group 
+- Install all packages to the latest version on hosts in the dev host group 
+
+
+
+- hosts: all
+  become: true
+  vars:
+    pkgs:
+      - php
+      - mariadb
+  tasks:
+  - name: "downloading packages"
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop: "{{ pkgs }}"
+    when: inventory_hostname in groups ['dev'] or inventory_hostname in groups ['test'] or inventory_hostname in groups ['prod'] 
+
+  - name: "Installing developmet group package"
+    yum:
+      name: "@RPM Development Tools"
+      state: present
+    when: inventory_hostname in groups ['dev']
+  
+  - name: "Updating all packages"
+    yum:
+      name: "*"
+      state: latest
+    when: inventory_hostname in groups ['dev']
+
+#=============================================================================================================================
+
+Q5)Using a selinux role create a selinux.yaml playbook to configure on all managed hosts to set the default target as permissive
+
+"Note": in real time they will provide some variables which we need to use 
+we need to install sellinux role for this question
+# ansible-galaxy role  install linux-system-roles.selinux -p roles 
+
+[senthil@ansible-c ~]$ cat selinux.yml 
+- hosts: all
+  become: true
+  vars:
+    - selinux_state: enforcing 
+    - selinux_policy: targeted
+
+  roles:
+    - role: linux-system-roles.selinux 
+
+
+#==============================================================================================================================
+
+
